@@ -13,7 +13,7 @@ const Read = () => {
     // useEffect hook runs after the component mounts (empty dependency array means it runs once)
     useEffect(() => {
         // Perform HTTP GET request using axios to fetch movie data
-        axios.get('https://data-rep-mern-application.github.io/dataserver/movies.json')
+        axios.get('http://localhost:3000/api/movies')
             .then((response) => {
                 // Logs the array of movies to the console for debugging
                 console.log(response.data.myArray);
