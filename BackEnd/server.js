@@ -1,67 +1,72 @@
-// Import the Express module to create the web server
+// Import the Express framework to create a web server
 import express from 'express';
 const app = express();
 const port = 3000;
 
-// Import and use CORS to allow requests from other origins
+// Import and enable CORS to allow cross-origin requests
 import cors from 'cors';
 app.use(cors());
 
-// Import and configure body-parser to handle form data and JSON in requests
+// Import and configure body-parser to parse URL-encoded and JSON request bodies
 import bodyParser from 'body-parser';
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Set headers to allow cross-origin requests and define allowed methods and headers
+// Set custom headers for CORS and allowed HTTP methods/headers
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // Allow any origin
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Allow these HTTP methods
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // Allow these headers
-  next(); // Pass control to the next middleware
+  res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Allowed methods
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // Allowed headers
+  next(); // Continue to the next middleware or route handler
 });
 
-// A simple route to check if the server is working
-app.get('/', (req, res) =>{
-    res.send('Hello World');
+// Import and connect to MongoDB using Mongoose
+import mongoose from 'mongoose';
+mongoose.connect('mongodb+srv://admin:admin@cluster0.si8dhu8.mongodb.net/?appName=Cluster0');
+
+// Define a schema for the Movie collection
+const movieSchema = new mongoose.Schema({
+  title: String,
+  year: String,
+  poster: String
 });
 
-// Route to handle GET requests to /api/movies
-app.get('/api/movies', (req, res) =>{
-    // A sample array of movies to send back as JSON
-    const movies = [
-    {
-      "Title": "Avengers: Infinity War (server)",
-      "Year": "2018",
-      "imdbID": "tt4154756",
-      "Type": "movie",
-      "Poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg"
-    },
-    {
-      "Title": "Captain America: Civil War (server)",
-      "Year": "2016",
-      "imdbID": "tt3498820",
-      "Type": "movie",
-      "Poster": "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_SX300.jpg"
-    },
-    {
-      "Title": "World War Z (server)",
-      "Year": "2013",
-      "imdbID": "tt0816711",
-      "Type": "movie",
-      "Poster": "https://m.media-amazon.com/images/M/MV5BNDQ4YzFmNzktMmM5ZC00MDZjLTk1OTktNDE2ODE4YjM2MjJjXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg"
-    }
-  ]
-  // Send the array of movies in a JSON response
-  res.json({myArray: movies })
-}) 
+// Create a model from the schema
+const movieModel = mongoose.model('Movie', movieSchema);
 
-// Route to handle POST requests to /api/movies
+// Route to create a new movie (POST request)
+app.post('/api/movies', async (req, res) => {
+  const { title, year, poster } = req.body;
+  const newMovie = new movieModel({ title, year, poster });
+  await newMovie.save();
+  res.status(201).json({ message: 'Movie created successfully', movie: newMovie });
+});
+
+// Root route to check if the server is running
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+// Route to get all movies (GET request)
+app.get('/api/movies', async (req, res) => {
+  const movies = await movieModel.find({});
+  res.json(movies);
+});
+
+// Route to get a single movie by its ID
+app.get('/api/movie/:id', async (req, res) => {
+  const movie = await movieModel.findById(req.params.id);
+  res.send(movie);
+});
+
+//  This second POST route to /api/movies overrides the previous one.
+// You should remove or rename it to avoid conflicts.
 app.post('/api/movies', (req, res) => {
-    console.log(req.body); // Log the data sent in the request body
-    res.send('POST request to the movies endpoint'); // Respond to confirm receipt
+  console.log(req.body);
+  res.send('POST request to the movies endpoint');
 });
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });

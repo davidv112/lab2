@@ -16,7 +16,7 @@ const MovieItem = (props) => {
                 </Card.Body>
 
                 {/* Displaying the movie release year in the card footer */}
-                <Card.Footer className="text-muted">{props.mymovie.Year}</Card.Footer>
+                <Card.Footer className="text-muted">{props.mymovie.year}</Card.Footer>
             </Card>
         </div>
     );
