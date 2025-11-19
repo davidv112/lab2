@@ -1,6 +1,6 @@
 // Importing the Card component from react-bootstrap for UI styling
 import Card from 'react-bootstrap/Card'
-
+import { Link } from 'react-router-dom'
 // Defining a functional component named MovieItem that takes 'props' as a parameter
 const MovieItem = (props) => {
     return (
@@ -9,14 +9,15 @@ const MovieItem = (props) => {
             <Card className="text-centre">
                 <Card.Body>
                     {/* Displaying the movie title passed in through props */}
-                    <Card.Title>{props.mymovie.Title}</Card.Title>
+                    <Card.Title>{props.mymovie.title}</Card.Title>
 
                     {/* Displaying the movie poster image */}
-                    <img src={props.mymovie.Poster} alt="Movie Poster" />
+                    <img src={props.mymovie.poster} alt="Movie Poster" />
                 </Card.Body>
 
                 {/* Displaying the movie release year in the card footer */}
                 <Card.Footer className="text-muted">{props.mymovie.year}</Card.Footer>
+                <Link className='btn btn-primary' to={"/edit/" +props.mymovie._id}>edit</Link>
             </Card>
         </div>
     );

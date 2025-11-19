@@ -12,6 +12,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Read from './components/read';
 import Create from './components/create';
+import Edit from './components/edit';
 
 {/*this is my comment */}
 function App() {
@@ -47,6 +48,7 @@ function App() {
         
         {/* Route for /create → renders Footer component */}
         <Route path='/create' element={<Create />}></Route>
+        <Route path='/edit/:id' element={<Edit></Edit>}></Route>
       </Routes>
     </BrowserRouter>
   )

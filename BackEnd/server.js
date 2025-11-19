@@ -59,6 +59,16 @@ app.get('/api/movie/:id', async (req, res) => {
   res.send(movie);
 });
 
+
+app.get('/api/movie/:id', async (req, res) => {
+    let movie = await movieModel.findById({ _id: req.params.id });
+    res.send(movie);
+});
+
+app.put('/api/movie/:id', async (req, res) => {
+    const updatedMovie = await movieModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedMovie);
+});
 //  This second POST route to /api/movies overrides the previous one.
 // You should remove or rename it to avoid conflicts.
 app.post('/api/movies', (req, res) => {

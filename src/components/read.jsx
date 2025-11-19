@@ -16,9 +16,9 @@ const Read = () => {
         axios.get('http://localhost:3000/api/movies')
             .then((response) => {
                 // Logs the array of movies to the console for debugging
-                console.log(response.data.myArray);
+                console.log(response.data);
                 // Updates the state variable with the fetched movie array
-                setMovie(response.data.myArray);
+                setMovie(response.data);
             })
             .catch((error) => {
                 // Logs any errors that occur during the fetch
