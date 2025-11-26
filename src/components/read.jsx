@@ -9,6 +9,13 @@ const Read = () => {
     // Declaring a state variable 'myMovies' to store an array of movies
     // 'setMovie' is the function used to update this state
     const [myMovies, setMovie] = useState([]);
+    const Reload = () =>{
+        axios.get('http://localhost:3000/api/movies')
+        .then((response) =>{
+            console.log(response.data);
+            setMovie(response.data);
+        })
+    }
 
     // useEffect hook runs after the component mounts (empty dependency array means it runs once)
     useEffect(() => {
@@ -30,9 +37,10 @@ const Read = () => {
         <div>
             {/* Displaying a header for the Read component */}
             <h1>Hello from Read Component</h1>
+            
 
             {/* Passing the fetched movies array as a prop named 'myMovies' to the Movies component */}
-            <Movies myMovies={myMovies}></Movies>
+            <Movies myMovies={myMovies} Reload={Reload}></Movies>
         </div>
     );
 }

@@ -8,7 +8,10 @@ const Movies = (props) => {
         // For each movie object, render a MovieItem component
         props.myMovies.map((movie) => {
             // Passing each movie object as a prop called 'mymovie' to the MovieItem component
-            return <MovieItem mymovie={movie}key={movie._id}></MovieItem>;
+            return <MovieItem mymovie={movie}
+key={movie._id}
+                Reload={props.Reload}>
+            </MovieItem>;
         })
     );
 }
